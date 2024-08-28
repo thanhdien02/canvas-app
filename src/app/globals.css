@@ -67,3 +67,11 @@
     @apply bg-background text-foreground;
   }
 }
+@layer utilities {
+  .h-screen-minus-68px {
+    height: calc(100vh - 68px);
+  }
+  .h-screen-minus-124px {
+    height: calc(100vh - 124px);
+  }
+}
