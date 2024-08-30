@@ -1,14 +1,11 @@
 import {
   ActiveTool,
   Editor,
-  STROKE_COLOR,
-  STROKE_WIDTH,
 } from "../type/type.editor";
 import ToolSidebarHeader from "./tool-siderbar-header";
 import { Separator } from "@/components/ui/separator";
 import ToolSidebarClose from "./tool-sidebar-close";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 
 interface TextSideBarProps {

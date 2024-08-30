@@ -4,6 +4,7 @@ import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
   FILL_COLOR,
+  FONT_FAMILY,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -21,16 +22,19 @@ import { useWindowEvents } from "./use-window-events";
 import useCanvasEvents from "./use-canvas-events";
 import { useClipboard } from "./use-clipboard";
 import { ITextboxOptions } from "fabric/fabric-impl";
+import { isTextType } from "../utils";
 const builderEditor = ({
   copy,
   paste,
   autoZoom,
   canvas,
+  fontFamily,
   fillColor,
   strokeColor,
   strokeWidth,
   strokeDashArray,
   setFillColor,
+  setFontFamily,
   setStrokeColor,
   setStrokeWidth,
   setStrokeDashArray,
@@ -99,6 +103,17 @@ const builderEditor = ({
       });
       canvas.renderAll();
     },
+    changeFontFamily: (value: string) => {
+      setFontFamily(value);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, fontFamily exists
+          object.set({ fontFamily: value });
+        }
+      });
+      canvas.renderAll();
+    },
     changeStrokeWidth: (value: number) => {
       setStrokeWidth(value);
       canvas.getActiveObjects().forEach((object) => {
@@ -151,6 +166,15 @@ const builderEditor = ({
         return fillColor;
       }
       const value = selectedObject.get("fill");
+      return value as string;
+    },
+    getActiveFontFamily: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return fontFamily;
+      }
+      // @ts-ignore
+      const value = selectedObject.get("fontFamily") || fontFamily;
       return value as string;
     },
     addCircle: () => {
@@ -250,6 +274,8 @@ const useEditor = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
+
+  const [fontFamily, setFontFamily] = useState(FONT_FAMILY);
   const [fillColor, setFillColor] = useState(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
@@ -269,6 +295,7 @@ const useEditor = () => {
         copy,
         paste,
         canvas,
+        fontFamily,
         fillColor,
         strokeColor,
         strokeWidth,
@@ -277,6 +304,7 @@ const useEditor = () => {
         setStrokeColor,
         setStrokeWidth,
         setStrokeDashArray,
+        setFontFamily,
         autoZoom,
         selectedObjects,
       });

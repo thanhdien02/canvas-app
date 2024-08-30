@@ -3,7 +3,7 @@ import Hint from "@/components/hint";
 import { ActiveTool, Editor } from "../type/type.editor";
 import { Button } from "@/components/ui/button";
 import { BsBorderWidth } from "react-icons/bs";
-import { ArrowDown, ArrowUp, Copy, Trash } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, Copy, Trash } from "lucide-react";
 import { isTextType } from "../utils";
 interface ToolBarProps {
   editor: Editor | undefined;
@@ -37,6 +37,22 @@ const ToolBar = ({
                 className={`size-4 rounded cursor-pointer`}
                 style={{ backgroundColor: editor?.getActiveFillColor() }}
               ></span>
+            </Button>
+          </Hint>
+        )}
+        {editor?.selectedObjects[0] && (
+          <Hint label="Font" side="bottom" sideOffset={10}>
+            <Button
+              className={`hover:bg-muted-foreground/20 w-auto px-2 text-sm text-black ${
+                isActive === "font" ? "bg-muted-foreground/20" : "bg-white"
+              }`}
+              size="icon"
+              onClick={() => onChangeActiveTool("font")}
+            >
+              <div className={`truncate max-w-[100px]`}>
+                {editor?.getActiveFontFamily()}
+              </div>
+              <ChevronDown className="size-4 shrink-0 ml-2" />
             </Button>
           </Hint>
         )}

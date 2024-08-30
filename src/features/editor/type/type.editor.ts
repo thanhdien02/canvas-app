@@ -9,11 +9,13 @@ export interface BuilderEditorProps {
   copy: () => void;
   paste: () => void;
   canvas: fabric.Canvas;
+  fontFamily: string;
   fillColor: string;
   strokeColor: string;
   strokeWidth: number;
   strokeDashArray: number[];
   selectedObjects: fabric.Object[];
+  setFontFamily: (value: string) => void;
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
@@ -38,6 +40,7 @@ export interface Editor {
   addSoftRectangle: () => void;
   addTriangle: () => void;
   addInverseTriangle: () => void;
+  getActiveFontFamily: () => string;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
@@ -46,6 +49,7 @@ export interface Editor {
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
   changeStrokeDashArray: (value: number[]) => void;
+  changeFontFamily: (value: string) => void; 
 }
 export const colors = [
   material.red["500"],
@@ -68,6 +72,28 @@ export const colors = [
   material.blueGrey["500"],
   "transparent",
 ];
+
+export const fonts = [
+  "Arial",
+  "Arial Black",
+  "Verdana",
+  "Helvetica",
+  "Tahoma",
+  "Trebuchet MS",
+  "Times New Roman",
+  "Georgia",
+  "Garamond",
+  "Courier New",
+  "Brush Script MT",
+  "Palatino",
+  "Bookman",
+  "Comic Sans MS",
+  "Impact",
+  "Lucida Sans Unicode",
+  "Geneva",
+  "Lucida Console",
+];
+
 export type ActiveTool =
   | "select"
   | "shapes"
