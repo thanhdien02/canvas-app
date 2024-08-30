@@ -47,6 +47,7 @@ const SideBar = ({ isActive, onChangeActiveTool }: SideBarProps) => {
           isActive={isActive === "draw"}
           onChangeActiveTool={() => {
             onChangeActiveTool("draw");
+            
           }}
         ></SideBarItem>
         <SideBarItem

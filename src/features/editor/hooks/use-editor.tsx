@@ -62,11 +62,15 @@ const builderEditor = ({
       canvas.discardActiveObject();
       canvas.requestRenderAll();
     },
-    enableDrawingMode: ()=> {
-      
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = strokeColor;
     },
-    disableDrawingMode: ()=> {
-
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
     },
     changeStrokeDashArray: (value: number[]) => {
       setStrokeDashArray(value);
@@ -84,6 +88,7 @@ const builderEditor = ({
           strokeWidth: value,
         });
       });
+      canvas.freeDrawingBrush.width = value;
       canvas.renderAll();
     },
     changeStrokeColor: (value: string) => {
@@ -93,6 +98,7 @@ const builderEditor = ({
           stroke: value,
         });
       });
+      canvas.freeDrawingBrush.color = value;
       canvas.renderAll();
     },
     changeFillColor: (value: string) => {

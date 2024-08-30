@@ -1,4 +1,4 @@
-import { ActiveTool, Editor, FILL_COLOR } from "../type/type.editor";
+import { ActiveTool, Editor, STROKE_COLOR } from "../type/type.editor";
 import ToolSidebarHeader from "./tool-siderbar-header";
 import { Separator } from "@/components/ui/separator";
 import ToolSidebarClose from "./tool-sidebar-close";
@@ -20,7 +20,7 @@ const StrokeColorSideBar = ({
     onChangeActiveTool("select");
   };
   const value = useMemo(
-    () => editor?.getActiveStrokeColor() || FILL_COLOR,
+    () => editor?.getActiveStrokeColor() || STROKE_COLOR,
     [editor]
   );
   const onChange = (value: string) => {

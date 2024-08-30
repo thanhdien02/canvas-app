@@ -15,10 +15,28 @@ import DrawSideBar from "./draw-sidebar";
 const Editor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
+
   const { init, editor } = useEditor();
 
   const [isActive, setIsActive] = useState<ActiveTool>("select");
+  const onChangeActiveTool = useCallback(
+    (tool: ActiveTool) => {
+      if (tool === "draw" && isActive !== "draw") {
+        editor?.enableDrawingMode();
+      }
 
+      if (isActive === "draw") {
+        editor?.disableDrawingMode();
+      }
+
+      if (tool === isActive) {
+        return setIsActive("select");
+      }
+
+      setIsActive(tool);
+    },
+    [editor, isActive]
+  );
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasRef.current, {
       controlsAboveOverlay: true,
@@ -36,21 +54,6 @@ const Editor = () => {
     editor?.autoZoom();
   };
 
-  const onChangeActiveTool = useCallback((tool: ActiveTool) => {
-    // if (tool === "draw") {
-    //   editor?.enableDrawingMode();
-    // }
-
-    // if (activeTool === "draw") {
-    //   editor?.disableDrawingMode();
-    // }
-
-    // if (tool === activeTool) {
-    //   return setActiveTool("select");
-    // }
-
-    setIsActive(tool);
-  }, []);
   return (
     <>
       <div className="h-full flex flex-col ">

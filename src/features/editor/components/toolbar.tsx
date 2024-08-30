@@ -71,29 +71,33 @@ const ToolBar = ({
             </Button>
           </Hint>
         )}
-        <Hint label="Copy & Paste" side="bottom" sideOffset={10}>
-          <Button
-            className={`hover:bg-muted-foreground/20 bg-white`}
-            size="icon"
-            onClick={() => {
-              editor?.onCopy();
-              editor?.onPaste();
-            }}
-          >
-            <Copy className="text-black size-4" />
-          </Button>
-        </Hint>
-        <Hint label="Trash" side="bottom" sideOffset={10}>
-          <Button
-            className={`hover:bg-muted-foreground/20 bg-white`}
-            size="icon"
-            onClick={() => {
-              editor?.onDelete();
-            }}
-          >
-            <Trash className="text-black size-4" />
-          </Button>
-        </Hint>
+        {editor?.selectedObjects[0] && (
+          <Hint label="Copy & Paste" side="bottom" sideOffset={10}>
+            <Button
+              className={`hover:bg-muted-foreground/20 bg-white`}
+              size="icon"
+              onClick={() => {
+                editor?.onCopy();
+                editor?.onPaste();
+              }}
+            >
+              <Copy className="text-black size-4" />
+            </Button>
+          </Hint>
+        )}
+        {editor?.selectedObjects[0] && (
+          <Hint label="Trash" side="bottom" sideOffset={10}>
+            <Button
+              className={`hover:bg-muted-foreground/20 bg-white`}
+              size="icon"
+              onClick={() => {
+                editor?.onDelete();
+              }}
+            >
+              <Trash className="text-black size-4" />
+            </Button>
+          </Hint>
+        )}
 
         <span></span>
       </div>
