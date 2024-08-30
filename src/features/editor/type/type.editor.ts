@@ -26,8 +26,11 @@ export interface Editor {
   onCopy: () => void;
   onPaste: () => void;
   onDelete: () => void;
+  bringForward: () => void;
+  sendBackwards: () => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
+  // addText: () => void;
   addCircle: () => void;
   addDiamond: () => void;
   addRectangle: () => void;

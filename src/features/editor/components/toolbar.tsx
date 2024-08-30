@@ -3,7 +3,7 @@ import Hint from "@/components/hint";
 import { ActiveTool, Editor } from "../type/type.editor";
 import { Button } from "@/components/ui/button";
 import { BsBorderWidth } from "react-icons/bs";
-import { Copy, Trash } from "lucide-react";
+import { ArrowDown, ArrowUp, Copy, Trash } from "lucide-react";
 interface ToolBarProps {
   editor: Editor | undefined;
   isActive?: ActiveTool;
@@ -19,7 +19,7 @@ const ToolBar = ({
   return (
     <div
       onClick={onClick}
-      className="h-[52px] px-4 shrink-0 border-b w-full overflow-x-auto flex items-center o"
+      className="h-[52px] px-4 shrink-0 border-b w-full overflow-x-auto flex items-center"
     >
       <div className="flex items-center gap-x-1">
         {editor?.selectedObjects[0] && (
@@ -71,6 +71,30 @@ const ToolBar = ({
             </Button>
           </Hint>
         )}
+        {editor?.selectedObjects[0] && (
+          <Hint label="Stroke width" side="bottom" sideOffset={10}>
+            <Button
+              className={`hover:bg-muted-foreground/20 bg-white`}
+              size="icon"
+              onClick={() => editor?.bringForward()}
+            >
+              <ArrowUp className="rounded size-4 text-black" />
+            </Button>
+          </Hint>
+        )}
+        {editor?.selectedObjects[0] && (
+          <Hint label="Stroke width" side="bottom" sideOffset={10}>
+            <Button
+              className={`hover:bg-muted-foreground/20 bg-white`}
+              size="icon"
+              onClick={() => editor?.sendBackwards()}
+            >
+              <ArrowDown className="rounded size-4 text-black" />
+            </Button>
+          </Hint>
+        )}
+
+        {/* Common */}
         {editor?.selectedObjects[0] && (
           <Hint label="Copy & Paste" side="bottom" sideOffset={10}>
             <Button

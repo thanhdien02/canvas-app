@@ -6,7 +6,6 @@ import {
   Pencil,
   Settings,
   Shapes,
-  Sparkles,
   Type,
 } from "lucide-react";
 interface SideBarProps {
@@ -34,6 +33,14 @@ const SideBar = ({ isActive, onChangeActiveTool }: SideBarProps) => {
           isActive={isActive === "fill"}
         ></SideBarItem>
         <SideBarItem
+          label="Text"
+          icon={Type}
+          onChangeActiveTool={() => {
+            onChangeActiveTool("text");
+          }}
+          isActive={isActive === "text"}
+        ></SideBarItem>
+        <SideBarItem
           label="Shapes"
           icon={Shapes}
           isActive={isActive === "shapes"}
@@ -47,7 +54,6 @@ const SideBar = ({ isActive, onChangeActiveTool }: SideBarProps) => {
           isActive={isActive === "draw"}
           onChangeActiveTool={() => {
             onChangeActiveTool("draw");
-            
           }}
         ></SideBarItem>
         <SideBarItem
