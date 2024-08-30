@@ -5,6 +5,8 @@ export interface UseEditorProps {
   initialContainer?: HTMLDivElement;
 }
 export interface BuilderEditorProps {
+  copy: () => void;
+  paste: () => void;
   canvas: fabric.Canvas;
   fillColor: string;
   strokeColor: string;
@@ -18,9 +20,14 @@ export interface BuilderEditorProps {
   autoZoom: () => void;
 }
 export interface Editor {
-  autoZoom: () => void;
-  copy: () => void;
   canvas: fabric.Canvas;
+  selectedObjects: fabric.Object[];
+  autoZoom: () => void;
+  onCopy: () => void;
+  onPaste: () => void;
+  onDelete: () => void;
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
   addCircle: () => void;
   addDiamond: () => void;
   addRectangle: () => void;
@@ -31,7 +38,6 @@ export interface Editor {
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
-  selectedObjects: fabric.Object[];
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;

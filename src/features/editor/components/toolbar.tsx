@@ -3,7 +3,7 @@ import Hint from "@/components/hint";
 import { ActiveTool, Editor } from "../type/type.editor";
 import { Button } from "@/components/ui/button";
 import { BsBorderWidth } from "react-icons/bs";
-import { Copy } from "lucide-react";
+import { Copy, Trash } from "lucide-react";
 interface ToolBarProps {
   editor: Editor | undefined;
   isActive?: ActiveTool;
@@ -71,21 +71,29 @@ const ToolBar = ({
             </Button>
           </Hint>
         )}
-        {editor?.selectedObjects[0] && (
-          <Hint label="Copy" side="bottom" sideOffset={10}>
-            <Button
-              className={`hover:bg-muted-foreground/20 ${
-                isActive === "stroke-width"
-                  ? "bg-muted-foreground/20"
-                  : "bg-white"
-              }`}
-              size="icon"
-              onClick={() => onChangeActiveTool("stroke-width")}
-            >
-              <Copy className="text-black size-4"  />
-            </Button>
-          </Hint>
-        )}
+        <Hint label="Copy & Paste" side="bottom" sideOffset={10}>
+          <Button
+            className={`hover:bg-muted-foreground/20 bg-white`}
+            size="icon"
+            onClick={() => {
+              editor?.onCopy();
+              editor?.onPaste();
+            }}
+          >
+            <Copy className="text-black size-4" />
+          </Button>
+        </Hint>
+        <Hint label="Trash" side="bottom" sideOffset={10}>
+          <Button
+            className={`hover:bg-muted-foreground/20 bg-white`}
+            size="icon"
+            onClick={() => {
+              editor?.onDelete();
+            }}
+          >
+            <Trash className="text-black size-4" />
+          </Button>
+        </Hint>
 
         <span></span>
       </div>

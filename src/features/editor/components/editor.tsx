@@ -11,6 +11,7 @@ import ShapesSideBar from "./shape-sidebar";
 import FillColorSideBar from "./fill-color-sidebar";
 import StrokeColorSideBar from "./stroke-color-sidebar";
 import StrokeWidthSideBar from "./stroke-width-sidebar";
+import DrawSideBar from "./draw-sidebar";
 const Editor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
@@ -79,6 +80,11 @@ const Editor = () => {
             editor={editor}
             onChangeActiveTool={onChangeActiveTool}
           ></StrokeWidthSideBar>
+          <DrawSideBar
+            isActive={isActive}
+            editor={editor}
+            onChangeActiveTool={onChangeActiveTool}
+          ></DrawSideBar>
           <div className="flex-1 flex flex-col overflow-auto">
             <ToolBar
               isActive={isActive}

@@ -18,7 +18,10 @@ import {
 import { useAutoResize } from "./use-auto-resize";
 import { useWindowEvents } from "./use-window-events";
 import useCanvasEvents from "./use-canvas-events";
+import { useClipboard } from "./use-clipboard";
 const builderEditor = ({
+  copy,
+  paste,
   autoZoom,
   canvas,
   fillColor,
@@ -50,7 +53,21 @@ const builderEditor = ({
     autoZoom,
     canvas,
     selectedObjects,
-    copy: ()=> {},
+    onCopy: () => copy(),
+    onPaste: () => paste(),
+    onDelete: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.remove(object);
+      });
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+    },
+    enableDrawingMode: ()=> {
+      
+    },
+    disableDrawingMode: ()=> {
+
+    },
     changeStrokeDashArray: (value: number[]) => {
       setStrokeDashArray(value);
       canvas.getActiveObjects().forEach((object) => {
@@ -213,9 +230,12 @@ const useEditor = () => {
 
   // useWindowEvents();
   useCanvasEvents({ canvas, setSelectedObjects });
+  const { copy, paste } = useClipboard({ canvas });
   const editor = useMemo(() => {
     if (canvas)
       return builderEditor({
+        copy,
+        paste,
         canvas,
         fillColor,
         strokeColor,
@@ -230,6 +250,8 @@ const useEditor = () => {
       });
     return undefined;
   }, [
+    copy,
+    paste,
     canvas,
     autoZoom,
     fillColor,
