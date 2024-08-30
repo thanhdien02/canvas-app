@@ -10,6 +10,9 @@ export function rgbaObjectToString(rgba: RGBColor | "transparent") {
   return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${alpha})`;
 }
 
-export function canvasTypeObject(objects: fabric.Object[]){
- 
+export function isTextType(type: string | undefined) {
+  return type === "text" || type === "i-text" || type === "textbox";
 }
+// export function isTextType(type: string | undefined) {
+//   return type === "text" || type === "i-text" || type === "textbox";
+// }

@@ -1,4 +1,5 @@
 import { fabric } from "fabric";
+import { ITextboxOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
 export interface UseEditorProps {
   initialCanvas?: fabric.Canvas;
@@ -30,7 +31,7 @@ export interface Editor {
   sendBackwards: () => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
-  // addText: () => void;
+  addText: (value: string, options?: ITextboxOptions) => void;
   addCircle: () => void;
   addDiamond: () => void;
   addRectangle: () => void;

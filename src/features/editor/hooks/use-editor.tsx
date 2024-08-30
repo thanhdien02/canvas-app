@@ -8,6 +8,7 @@ import {
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "../type/type.editor";
 import {
@@ -19,6 +20,7 @@ import { useAutoResize } from "./use-auto-resize";
 import { useWindowEvents } from "./use-window-events";
 import useCanvasEvents from "./use-canvas-events";
 import { useClipboard } from "./use-clipboard";
+import { ITextboxOptions } from "fabric/fabric-impl";
 const builderEditor = ({
   copy,
   paste,
@@ -231,6 +233,14 @@ const builderEditor = ({
           strokeDashArray: strokeDashArray,
         }
       );
+      addToCanvas(object);
+    },
+    addText: (value: string, options?: ITextboxOptions) => {
+      const object = new fabric.Textbox(value, {
+        ...TEXT_OPTIONS,
+        fill: fillColor,
+        ...options,
+      });
       addToCanvas(object);
     },
   };

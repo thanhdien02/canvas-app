@@ -4,6 +4,7 @@ import { ActiveTool, Editor } from "../type/type.editor";
 import { Button } from "@/components/ui/button";
 import { BsBorderWidth } from "react-icons/bs";
 import { ArrowDown, ArrowUp, Copy, Trash } from "lucide-react";
+import { isTextType } from "../utils";
 interface ToolBarProps {
   editor: Editor | undefined;
   isActive?: ActiveTool;
@@ -16,6 +17,7 @@ const ToolBar = ({
   editor,
   isActive,
 }: ToolBarProps) => {
+  const isText = isTextType(editor?.selectedObjects[0]?.type);
   return (
     <div
       onClick={onClick}
@@ -38,7 +40,7 @@ const ToolBar = ({
             </Button>
           </Hint>
         )}
-        {editor?.selectedObjects[0] && (
+        {!isText && editor?.selectedObjects[0] && (
           <Hint label="Stroke" side="bottom" sideOffset={10}>
             <Button
               className={`hover:bg-muted-foreground/20 ${
@@ -56,7 +58,7 @@ const ToolBar = ({
             </Button>
           </Hint>
         )}
-        {editor?.selectedObjects[0] && (
+        {!isText && editor?.selectedObjects[0] && (
           <Hint label="Stroke width" side="bottom" sideOffset={10}>
             <Button
               className={`hover:bg-muted-foreground/20 ${
@@ -93,7 +95,6 @@ const ToolBar = ({
             </Button>
           </Hint>
         )}
-
         {/* Common */}
         {editor?.selectedObjects[0] && (
           <Hint label="Copy & Paste" side="bottom" sideOffset={10}>
