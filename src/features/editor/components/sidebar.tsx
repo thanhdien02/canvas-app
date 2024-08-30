@@ -29,9 +29,9 @@ const SideBar = ({ isActive, onChangeActiveTool }: SideBarProps) => {
           label="Image"
           icon={ImageIcon}
           onChangeActiveTool={() => {
-            onChangeActiveTool("images");
+            onChangeActiveTool("fill");
           }}
-          isActive={isActive === "images"}
+          isActive={isActive === "fill"}
         ></SideBarItem>
         <SideBarItem
           label="Shapes"

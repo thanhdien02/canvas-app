@@ -23,12 +23,8 @@ const ShapesSideBar = ({
   };
   return (
     <div
-      className={`flex flex-col relative z-40 shrink-0 border-r bg-white transition-all
-         ${
-           isActive === "shapes"
-             ? "w-[360px] opacity-100"
-             : "w-0 opacity-0 invisible"
-         }`}
+      className={`flex flex-col relative z-40 shrink-0 border-r bg-white transition-all w-[360px]
+      ${isActive === "shapes" ? "block" : "hidden"}`}
     >
       <ToolSidebarHeader
         title="Shapes"

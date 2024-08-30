@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Navbar from "@/features/editor/components/navbar";
 import SideBar from "@/features/editor/components/sidebar";
 import ToolBar from "@/features/editor/components/toolbar";
@@ -8,12 +8,15 @@ import useEditor from "../hooks/use-editor";
 import { fabric } from "fabric";
 import { ActiveTool } from "../type/type.editor";
 import ShapesSideBar from "./shape-sidebar";
+import FillColorSideBar from "./fill-color-sidebar";
+import StrokeColorSideBar from "./stroke-color-sidebar";
+import StrokeWidthSideBar from "./stroke-width-sidebar";
 const Editor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
   const { init, editor } = useEditor();
 
-  const [isActive, setIsActive] = useState<ActiveTool>("shapes");
+  const [isActive, setIsActive] = useState<ActiveTool>("select");
 
   useEffect(() => {
     const canvas = new fabric.Canvas(canvasRef.current, {
@@ -32,9 +35,21 @@ const Editor = () => {
     editor?.autoZoom();
   };
 
-  const onChangeActiveTool = (tool: ActiveTool) => {
+  const onChangeActiveTool = useCallback((tool: ActiveTool) => {
+    // if (tool === "draw") {
+    //   editor?.enableDrawingMode();
+    // }
+
+    // if (activeTool === "draw") {
+    //   editor?.disableDrawingMode();
+    // }
+
+    // if (tool === activeTool) {
+    //   return setActiveTool("select");
+    // }
+
     setIsActive(tool);
-  };
+  }, []);
   return (
     <>
       <div className="h-full flex flex-col ">
@@ -49,8 +64,28 @@ const Editor = () => {
             editor={editor}
             onChangeActiveTool={onChangeActiveTool}
           ></ShapesSideBar>
+          <FillColorSideBar
+            isActive={isActive}
+            editor={editor}
+            onChangeActiveTool={onChangeActiveTool}
+          ></FillColorSideBar>
+          <StrokeColorSideBar
+            isActive={isActive}
+            editor={editor}
+            onChangeActiveTool={onChangeActiveTool}
+          ></StrokeColorSideBar>
+          <StrokeWidthSideBar
+            isActive={isActive}
+            editor={editor}
+            onChangeActiveTool={onChangeActiveTool}
+          ></StrokeWidthSideBar>
           <div className="flex-1 flex flex-col overflow-auto">
-            <ToolBar onClick={handleSave} />
+            <ToolBar
+              isActive={isActive}
+              editor={editor}
+              onChangeActiveTool={onChangeActiveTool}
+              onClick={handleSave}
+            />
             <div
               className="flex-1 bg-muted h-screen-minus-124px z-1"
               ref={containerRef}

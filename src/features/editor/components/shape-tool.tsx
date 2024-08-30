@@ -8,8 +8,8 @@ interface ShapeToolProps {
 }
 const ShapeTool = ({ icon: Icon, onClick, iconClassName }: ShapeToolProps) => {
   return (
-    <button className="aspect-square border rounded-md p-5">
-      <Icon className={`h-full w-full ${iconClassName}`} onClick={onClick} />
+    <button className="aspect-square border rounded-md p-5" onClick={onClick}>
+      <Icon className={`h-full w-full ${iconClassName}`} />
     </button>
   );
 };
