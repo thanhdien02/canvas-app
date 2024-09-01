@@ -41,15 +41,27 @@ export interface Editor {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   getActiveFontFamily: () => string;
+  getActiveFontUnderline: () => boolean;
+  getActiveFontWeight: () => number;
+  getActiveFontStyle: () => string;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
+  getActiveOpacity: () => number;
   getActiveStrokeDashArray: () => number[];
+  getActiveFontLineThrough: () => boolean;
+  getActiveTextAlign: () => string;
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
   changeStrokeDashArray: (value: number[]) => void;
-  changeFontFamily: (value: string) => void; 
+  changeFontFamily: (value: string) => void;
+  changeOpacity: (value: number) => void;
+  changeFontWeight: (value: number) => void;
+  changeFontStyle: (value: string) => void;
+  changeFontLineThrough: (value: boolean) => void;
+  changeFontUnderline: (value: boolean) => void;
+  changeTextAlign: (value: string) => void;
 }
 export const colors = [
   material.red["500"],

@@ -1,7 +1,6 @@
 import {
   ActiveTool,
   Editor,
-  FILL_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
 } from "../type/type.editor";
@@ -30,8 +29,8 @@ const StrokeWidthSideBar = ({
   const onClose = () => {
     onChangeActiveTool("select");
   };
-  const onChange = (values: number[]) => {
-    editor?.changeStrokeWidth(values[0]);
+  const onChange = (value: number[]) => {
+    editor?.changeStrokeWidth(value[0]);
   };
   return (
     <div

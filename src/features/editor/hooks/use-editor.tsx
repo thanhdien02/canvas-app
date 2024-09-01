@@ -94,12 +94,56 @@ const builderEditor = ({
     disableDrawingMode: () => {
       canvas.isDrawingMode = false;
     },
+    changeTextAlign: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        // @ts-ignore
+        object.set({ textAlign: value });
+      });
+      canvas.renderAll();
+    },
+    changeFontUnderline: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        // @ts-ignore
+        object.set({ underline: value });
+      });
+      canvas.renderAll();
+    },
+    changeFontLineThrough: (value: boolean) => {
+      canvas.getActiveObjects().forEach((object) => {
+        // @ts-ignore
+        object.set({ linethrough: value });
+      });
+      canvas.renderAll();
+    },
+    changeFontStyle: (value: string) => {
+      canvas.getActiveObjects().forEach((object) => {
+        // @ts-ignore
+        object.set({ fontStyle: value });
+      });
+      canvas.renderAll();
+    },
+    changeFontWeight: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          // Faulty TS library, fontWeight exists
+          object.set({ fontWeight: value });
+        }
+      });
+      canvas.renderAll();
+    },
     changeStrokeDashArray: (value: number[]) => {
       setStrokeDashArray(value);
       canvas.getActiveObjects().forEach((object) => {
         object.set({
           strokeDashArray: value,
         });
+      });
+      canvas.renderAll();
+    },
+    changeOpacity: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ opacity: value });
       });
       canvas.renderAll();
     },
@@ -175,6 +219,48 @@ const builderEditor = ({
       }
       // @ts-ignore
       const value = selectedObject.get("fontFamily") || fontFamily;
+      return value as string;
+    },
+    getActiveOpacity: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) return 1;
+      const value = selectedObject.get("opacity") || 1;
+      return value as number;
+    },
+    getActiveFontWeight: () => {
+      const selectObject = selectedObjects[0];
+      if (!selectObject) return 500;
+      //@ts-ignore
+      const value = selectObject.get("fontWeight") || 500;
+      return value as number;
+    },
+    getActiveFontStyle: () => {
+      const selectObject = selectedObjects[0];
+      if (!selectObject) return "normal";
+      //@ts-ignore
+      const value = selectObject.get("fontStyle") || "normal";
+      return value as string;
+    },
+    getActiveFontLineThrough: () => {
+      const selectObject = selectedObjects[0];
+      if (!selectObject) return false;
+      //@ts-ignore
+      const value = selectObject.get("linethrough") || false;
+      return value as boolean;
+    },
+    getActiveFontUnderline: () => {
+      const selectObject = selectedObjects[0];
+      if (!selectObject) return false;
+      //@ts-ignore
+      const value = selectObject.get("underline") || false;
+      return value as boolean;
+    },
+    getActiveTextAlign: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) return "left";
+
+      //@ts-ignore
+      const value = selectedObject.get("textAlign") || "left";
       return value as string;
     },
     addCircle: () => {
@@ -314,6 +400,7 @@ const useEditor = () => {
     paste,
     canvas,
     autoZoom,
+    fontFamily,
     fillColor,
     strokeColor,
     strokeWidth,
