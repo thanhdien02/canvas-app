@@ -40,6 +40,8 @@ export interface Editor {
   addSoftRectangle: () => void;
   addTriangle: () => void;
   addInverseTriangle: () => void;
+  addImage: (value: string) => void;
+  getActiveFontSize: () => number;
   getActiveFontFamily: () => string;
   getActiveFontUnderline: () => boolean;
   getActiveFontWeight: () => number;
@@ -62,6 +64,7 @@ export interface Editor {
   changeFontLineThrough: (value: boolean) => void;
   changeFontUnderline: (value: boolean) => void;
   changeTextAlign: (value: string) => void;
+  changeFontSize: (value: number) => void;
 }
 export const colors = [
   material.red["500"],

@@ -1,5 +1,6 @@
 "use client";
 import Editor from "@/features/editor/components/editor";
+import { useSession } from "next-auth/react";
 
 interface EditorDetailProps {
   params: {
@@ -7,6 +8,8 @@ interface EditorDetailProps {
   };
 }
 const EditorDetail = ({ params }: EditorDetailProps) => {
+  const session = useSession()
+  console.log("🚀 ~ EditorDetail ~ session:", session)
   return <Editor />;
 };
 

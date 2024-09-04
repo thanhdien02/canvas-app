@@ -5,6 +5,7 @@ import {
   DIAMOND_OPTIONS,
   FILL_COLOR,
   FONT_FAMILY,
+  FONT_SIZE,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -23,6 +24,7 @@ import useCanvasEvents from "./use-canvas-events";
 import { useClipboard } from "./use-clipboard";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import { isTextType } from "../utils";
+import useHistory from "./use-history";
 const builderEditor = ({
   copy,
   paste,
@@ -93,6 +95,15 @@ const builderEditor = ({
     },
     disableDrawingMode: () => {
       canvas.isDrawingMode = false;
+    },
+    changeFontSize: (value: number) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextType(object.type)) {
+          // @ts-ignore
+          object.set({ fontSize: value });
+        }
+      });
+      canvas.renderAll();
     },
     changeTextAlign: (value: string) => {
       canvas.getActiveObjects().forEach((object) => {
@@ -263,6 +274,14 @@ const builderEditor = ({
       const value = selectedObject.get("textAlign") || "left";
       return value as string;
     },
+    getActiveFontSize: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) return FONT_SIZE;
+
+      //@ts-ignore
+      const value = selectedObject.get("fontSize") || FONT_SIZE;
+      return value as number;
+    },
     addCircle: () => {
       const object = new fabric.Circle({
         ...CIRCLE_OPTIONS,
@@ -353,6 +372,22 @@ const builderEditor = ({
       });
       addToCanvas(object);
     },
+    addImage: (value: string) => {
+      fabric.Image.fromURL(
+        value,
+        (image) => {
+          const workspace = getWorkspace();
+
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
+
+          addToCanvas(image);
+        },
+        {
+          crossOrigin: "anonymous",
+        }
+      );
+    },
   };
 };
 
@@ -373,7 +408,10 @@ const useEditor = () => {
   });
 
   // useWindowEvents();
-  useCanvasEvents({ canvas, setSelectedObjects });
+  // canvas?.loadFromJSON()
+  const {save} = useHistory();
+  useCanvasEvents({ canvas, setSelectedObjects, save });
+
   const { copy, paste } = useClipboard({ canvas });
   const editor = useMemo(() => {
     if (canvas)

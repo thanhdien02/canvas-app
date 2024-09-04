@@ -2,7 +2,7 @@
 import Hint from "@/components/hint";
 import { ActiveTool, Editor } from "../type/type.editor";
 import { Button } from "@/components/ui/button";
-import { BsBorderWidth } from "react-icons/bs";
+import { BsBorderWidth, BsFileMinus, BsPlus } from "react-icons/bs";
 import {
   AlignCenter,
   AlignLeft,
@@ -11,12 +11,15 @@ import {
   ArrowUp,
   ChevronDown,
   Copy,
+  Minus,
+  Plus,
   Trash,
 } from "lucide-react";
 import { RxTransparencyGrid } from "react-icons/rx";
 import { isTextType } from "../utils";
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import FontSizeInput from "./font-size-toolbar";
 interface ToolBarProps {
   editor: Editor | undefined;
   isActive?: ActiveTool;
@@ -40,6 +43,7 @@ const ToolBar = ({
   const initialFontLineThrough = editor?.getActiveFontLineThrough();
   const initialFontUnderline = editor?.getActiveFontUnderline();
   const initialTextAlign = editor?.getActiveTextAlign();
+  const initialFontSize = editor?.getActiveFontSize();
 
   const [properties, setProperties] = useState({
     fontWeight: initialFontWeight,
@@ -52,6 +56,7 @@ const ToolBar = ({
     fontLineThrough: initialFontLineThrough,
     fontUnderline: initialFontUnderline,
     textAlign: initialTextAlign,
+    fontSize: initialFontSize,
   });
   useEffect(() => {
     setProperties({
@@ -65,6 +70,7 @@ const ToolBar = ({
       fontLineThrough: initialFontLineThrough,
       fontUnderline: initialFontUnderline,
       textAlign: initialTextAlign,
+      fontSize: initialFontSize,
     });
   }, [
     selectedObject,
@@ -78,6 +84,7 @@ const ToolBar = ({
     initialFontLineThrough,
     initialFontUnderline,
     initialTextAlign,
+    initialFontSize,
   ]);
 
   const isText = isTextType(editor?.selectedObjects[0]?.type);
@@ -110,6 +117,10 @@ const ToolBar = ({
     // const value = valueUnderline ? false : true;
     editor?.changeTextAlign(value);
     setProperties({ ...properties, textAlign: value });
+  };
+  const onChangeFontSize = (value: number) => {
+    editor?.changeFontSize(value);
+    setProperties({ ...properties, fontSize: value });
   };
   return (
     <div
@@ -239,6 +250,14 @@ const ToolBar = ({
             >
               <AlignRight className="size-4" />
             </Button>
+          </Hint>
+        )}
+        {isText && editor?.selectedObjects[0] && (
+          <Hint label="Text right" side="bottom" sideOffset={10}>
+            <FontSizeInput
+              value={properties.fontSize as number}
+              onChange={onChangeFontSize}
+            ></FontSizeInput>
           </Hint>
         )}
         {!isText && editor?.selectedObjects[0] && (
