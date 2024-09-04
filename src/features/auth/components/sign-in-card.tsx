@@ -9,6 +9,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { CircleAlert, Eye, EyeOff } from "lucide-react";
+
 import { useState } from "react";
 type Inputs = {
   email: string;
@@ -74,7 +75,7 @@ const CardSignIn = () => {
             />
           )}
         </div>
-        <Button className="w-full" type="submit" disabled={true}>
+        <Button className="w-full" type="submit">
           Continue
         </Button>
       </form>

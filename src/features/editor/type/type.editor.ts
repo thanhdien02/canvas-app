@@ -53,6 +53,8 @@ export interface Editor {
   getActiveStrokeDashArray: () => number[];
   getActiveFontLineThrough: () => boolean;
   getActiveTextAlign: () => string;
+  getActiveBackgroundPage: () => string;
+  getActiveSizePage: () => { width: number; height: number };
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
   changeStrokeWidth: (value: number) => void;
@@ -65,6 +67,8 @@ export interface Editor {
   changeFontUnderline: (value: boolean) => void;
   changeTextAlign: (value: string) => void;
   changeFontSize: (value: number) => void;
+  changeSizePage: (width: number, height: number) => void;
+  changeBackgroundPage: (value: string) => void;
 }
 export const colors = [
   material.red["500"],

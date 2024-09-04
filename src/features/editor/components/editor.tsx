@@ -16,6 +16,7 @@ import TextSideBar from "./text-sidebar";
 import FontSideBar from "./font-sidebar";
 import OpacitySideBar from "./opacity-sidebar";
 import ImageSideBar from "./image-sidebar";
+import SettingSideBar from "./setting-sidebar";
 const Editor = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
@@ -112,6 +113,11 @@ const Editor = () => {
             editor={editor}
             onChangeActiveTool={onChangeActiveTool}
           ></ImageSideBar>
+          <SettingSideBar
+            isActive={isActive}
+            editor={editor}
+            onChangeActiveTool={onChangeActiveTool}
+          ></SettingSideBar>
           <div className="flex-1 flex flex-col overflow-auto">
             <ToolBar
               isActive={isActive}

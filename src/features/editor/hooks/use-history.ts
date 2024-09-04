@@ -14,6 +14,7 @@ const useHistory = () => {
     return historyIndex < canvasHistory.current.length - 1;
   }, [historyIndex]);
   const save = useCallback(() => {
+    
     console.log("saved");
   }, []);
   return { save };

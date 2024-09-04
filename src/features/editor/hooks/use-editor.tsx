@@ -196,6 +196,34 @@ const builderEditor = ({
       });
       canvas.renderAll();
     },
+    changeSizePage: (width: number, height: number) => {
+      const workspace = getWorkspace();
+      workspace?.set({ width, height });
+      autoZoom();
+    },
+    changeBackgroundPage: (value: string) => {
+      const workspace = getWorkspace();
+      if (workspace) {
+        workspace.set({ fill: value });
+        canvas.renderAll();
+      }
+    },
+    getActiveSizePage: () => {
+      const workspace = getWorkspace();
+      if (!workspace) return { width: 0, height: 0 };
+      return {
+        width: workspace.width || 0,
+        height: workspace.height || 0,
+      };
+    },
+    getActiveBackgroundPage: () => {
+      const workspace = getWorkspace();
+
+      if (!workspace) return "white";
+      const value = workspace.get("fill") || "white";
+
+      return value as string;
+    },
     getActiveStrokeDashArray: () => {
       const selectObject = selectedObjects[0];
       if (!selectObject) return strokeDashArray;
@@ -409,7 +437,7 @@ const useEditor = () => {
 
   // useWindowEvents();
   // canvas?.loadFromJSON()
-  const {save} = useHistory();
+  const { save } = useHistory();
   useCanvasEvents({ canvas, setSelectedObjects, save });
 
   const { copy, paste } = useClipboard({ canvas });
@@ -465,7 +493,7 @@ const useEditor = () => {
       });
       const initialWorkspace = new fabric.Rect({
         width: 900,
-        height: 1100,
+        height: 1200,
         name: "clip",
         fill: "white",
         selectable: false,

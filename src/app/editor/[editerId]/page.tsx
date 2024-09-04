@@ -8,8 +8,7 @@ interface EditorDetailProps {
   };
 }
 const EditorDetail = ({ params }: EditorDetailProps) => {
-  const session = useSession()
-  console.log("🚀 ~ EditorDetail ~ session:", session)
+  const session = useSession();
   return <Editor />;
 };
 
