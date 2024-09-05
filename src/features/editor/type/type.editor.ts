@@ -1,6 +1,17 @@
 import { fabric } from "fabric";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import * as material from "material-colors";
+
+export const JSON_KEYS = [
+  "name",
+  "gradientAngle",
+  "selectable",
+  "hasControls",
+  "linkData",
+  "editable",
+  "extensionType",
+  "extension",
+];
 export interface UseEditorProps {
   initialCanvas?: fabric.Canvas;
   initialContainer?: HTMLDivElement;
@@ -25,6 +36,8 @@ export interface BuilderEditorProps {
 export interface Editor {
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
+  saveJson: () => void;
+  loadJson: (json: string) => void;
   autoZoom: () => void;
   onCopy: () => void;
   onPaste: () => void;

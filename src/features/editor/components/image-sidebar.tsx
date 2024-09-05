@@ -8,6 +8,7 @@ import { useGetImages } from "@/features/images/api/use-get-images";
 import Image from "next/image";
 import Link from "next/link";
 import { AlertTriangle, Loader } from "lucide-react";
+import { UploadButton } from "@/lib/uploadthing";
 
 interface ImageSideBarProps {
   isActive: ActiveTool;
@@ -33,6 +34,22 @@ const ImageSideBar = ({
         description="Add images to your design"
       ></ToolSidebarHeader>
       <Separator orientation="horizontal"></Separator>
+
+      <div className="p-4 border-b">
+        <UploadButton
+          appearance={{
+            button: "w-full text-sm font-medium",
+            allowedContent: "hidden",
+          }}
+          content={{
+            button: "Upload Image",
+          }}
+          endpoint="imageUploader"
+          onClientUploadComplete={(res) => {
+            editor?.addImage(res[0].url);
+          }}
+        />
+      </div>
       {isLoading && (
         <div className="flex items-center justify-center flex-1">
           <Loader className="size-4 text-muted-foreground animate-spin" />
@@ -47,7 +64,7 @@ const ImageSideBar = ({
         </div>
       )}
       <ScrollArea>
-        <div className="p-4">
+        <div className="p-4 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             {data &&
               data.map((image) => {
@@ -80,6 +97,7 @@ const ImageSideBar = ({
           </div>
         </div>
       </ScrollArea>
+
       <ToolSidebarClose onClose={onClose}></ToolSidebarClose>
     </div>
   );

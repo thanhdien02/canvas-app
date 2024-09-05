@@ -1,7 +1,13 @@
 "use client";
 import Logo from "./logo";
-import { ChevronDown, MousePointerClick, Redo2, Undo2 } from "lucide-react";
-import { BsCloudCheck, BsCloudSlash } from "react-icons/bs";
+import {
+  ChevronDown,
+  Download,
+  MousePointerClick,
+  Redo2,
+  Undo2,
+} from "lucide-react";
+import { BsCloudCheck } from "react-icons/bs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +19,25 @@ import { CiFileOn } from "react-icons/ci";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import Hint from "@/components/hint";
-
-const Navbar = () => {
+import { Editor } from "../type/type.editor";
+import { useFilePicker } from "use-file-picker";
+interface NavbarProps {
+  editor: Editor | undefined;
+}
+const Navbar = ({ editor }: NavbarProps) => {
+  const { openFilePicker } = useFilePicker({
+    accept: ".json",
+    onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+      if (plainFiles && plainFiles.length > 0) {
+        const file = plainFiles[0];
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = () => {
+          editor?.loadJson(reader.result as string);
+        };
+      }
+    },
+  });
   return (
     <div className="h-[68px] p-4 pl-8 flex items-center shrink-0 border-b">
       <Link href="/">
@@ -34,7 +57,9 @@ const Navbar = () => {
           <DropdownMenuContent>
             <DropdownMenuItem
               className="flex items-center gap-2"
-              onClick={() => {}}
+              onClick={() => {
+                openFilePicker();
+              }}
             >
               <CiFileOn className="size-8" />
               <div>
@@ -71,6 +96,31 @@ const Navbar = () => {
       <div className="flex items-center gap-x-2">
         <BsCloudCheck className="w-[22px] h-[20px] text-muted-foreground" />
         <span className="text-sm text-muted-foreground">Saved</span>
+      </div>
+
+      <div className="ml-auto flex items-center gap-x-4">
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <Button size="sm" variant="ghost">
+              Export
+              <Download className="size-4 ml-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem
+              className="flex items-center gap-x-2"
+              onClick={() => editor?.saveJson()}
+            >
+              <CiFileOn className="size-8" />
+              <div>
+                <p>JSON</p>
+                <p className="text-xs text-muted-foreground">
+                  Save for later editing
+                </p>
+              </div>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

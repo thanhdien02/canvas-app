@@ -6,6 +6,7 @@ import {
   FILL_COLOR,
   FONT_FAMILY,
   FONT_SIZE,
+  JSON_KEYS,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -23,7 +24,7 @@ import { useWindowEvents } from "./use-window-events";
 import useCanvasEvents from "./use-canvas-events";
 import { useClipboard } from "./use-clipboard";
 import { ITextboxOptions } from "fabric/fabric-impl";
-import { isTextType } from "../utils";
+import { downloadFile, isTextType, transformText } from "../utils";
 import useHistory from "./use-history";
 const builderEditor = ({
   copy,
@@ -42,6 +43,23 @@ const builderEditor = ({
   setStrokeDashArray,
   selectedObjects,
 }: BuilderEditorProps): Editor => {
+  const saveJson = async () => {
+    const dataUrl = canvas.toJSON(JSON_KEYS);
+
+    await transformText(dataUrl.objects);
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, "\t")
+    )}`;
+    downloadFile(fileString, "json");
+  };
+
+  const loadJson = (json: string) => {
+    const data = JSON.parse(json);
+
+    canvas.loadFromJSON(data, () => {
+      autoZoom();
+    });
+  };
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === "clip");
   };
@@ -70,6 +88,8 @@ const builderEditor = ({
       canvas.discardActiveObject();
       canvas.requestRenderAll();
     },
+    saveJson,
+    loadJson,
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
         canvas?.bringForward(object);
