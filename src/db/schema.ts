@@ -1,3 +1,5 @@
+import { relations } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
 import {
   boolean,
   timestamp,
@@ -18,6 +20,10 @@ export const users = pgTable("user", {
   image: text("image"),
   password: text("password"),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  projects: many(projects),
+}));
 
 export const accounts = pgTable(
   "account",
@@ -85,3 +91,30 @@ export const authenticators = pgTable(
     }),
   })
 );
+
+export const projects = pgTable("project", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
+  name: text("name").notNull(),
+  json: text("json").notNull(),
+  height: integer("height").notNull(),
+  width: integer("width").notNull(),
+  thumbnailUrl: text("thumbnailUrl"),
+  isTemplate: boolean("isTemplate"),
+  isPro: boolean("isPro"),
+  createAt: timestamp("createAt", { mode: "date" }).notNull(),
+  updateAt: timestamp("updateAt", { mode: "date" }).notNull(),
+});
+export const projectsInsertSchema = createInsertSchema(projects);
+export const projectsRelations = relations(projects, ({ one }) => ({
+  author: one(users, {
+    fields: [projects.userId],
+    references: [users.id],
+  }),
+}));

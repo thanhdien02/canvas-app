@@ -1,7 +1,18 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { useCreateProject } from "@/features/projects/api/use-create-project";
 import { ArrowRight, Sparkles } from "lucide-react";
 
 const Banner = () => {
+  const mutation = useCreateProject();
+  const onCreateProject = () => {
+    mutation.mutate({
+      name: "Untitled project",
+      height: 1200,
+      width: 900,
+      json: "",
+    });
+  };
   return (
     <div className="flex items-center gap-x-6 bg-gradient-to-r from-blue-600 to-blue-400 h-[250px] w-full rounded-xl px-8">
       <div className="lg:block hidden relative size-28 bg-white/50 rounded-full">
@@ -21,6 +32,7 @@ const Banner = () => {
         <Button
           className="flex items-center gap-x-2 w-[160px]"
           variant="secondary"
+          onClick={onCreateProject}
         >
           Start creating
           <ArrowRight className="size-4 text-black" />

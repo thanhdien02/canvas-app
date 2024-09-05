@@ -15,6 +15,20 @@
       "when": 1725424215578,
       "tag": "0001_closed_mercury",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725546498683,
+      "tag": "0002_productive_shard",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1725554106825,
+      "tag": "0003_magenta_fallen_one",
+      "breakpoints": true
     }
   ]
 }
