@@ -2,10 +2,76 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { db } from "@/db/drizzle";
-import { projects } from "@/db/schema";
+import { projects, projectsInsertSchema } from "@/db/schema";
 import { auth } from "@/auth";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
+
 const app = new Hono()
+  .patch(
+    "/:id",
+    zValidator(
+      "param",
+      z.object({
+        id: z.string(),
+      })
+    ),
+    zValidator(
+      "json",
+      projectsInsertSchema
+        .omit({
+          id: true,
+          userId: true,
+          createAt: true,
+          updateAt: true,
+        })
+        .partial()
+    ),
+    async (c) => {
+      const session = await auth();
+      const { id } = c.req.valid("param");
+      const values = c.req.valid("json");
+      if (!session || !session?.user?.id) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+      const data = await db
+        .update(projects)
+        .set({
+          ...values,
+          updateAt: new Date(),
+        })
+        .where(
+          and(eq(projects.id, id), eq(projects.userId, session.user?.id || ""))
+        )
+        .returning();
+
+      if (data.length === 0) {
+        return c.json({ error: "Invalid project" }, 400);
+      }
+
+      return c.json({ data: data[0] }, 200);
+    }
+  )
+  .get(
+    "/:id",
+    zValidator(
+      "param",
+      z.object({
+        id: z.string(),
+      })
+    ),
+    async (c) => {
+      const session = await auth();
+      const { id } = c.req.valid("param");
+      if (!session || !session?.user?.id) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+      const data = await db.select().from(projects).where(eq(projects.id, id));
+      if (!data[0]) {
+        return c.json({ error: "Not found" }, 400);
+      }
+      return c.json({ data: data[0] }, 200);
+    }
+  )
   .get(
     "/",
     zValidator(
@@ -21,10 +87,6 @@ const app = new Hono()
       if (!session) {
         return c.json({ error: "Unauthorized" }, 401);
       }
-      // const query = await db
-      //   .select()
-      //   .from(projects)
-      //   .where(eq(projects.userId, session.user?.id || ""));
       const data = await db
         .select()
         .from(projects)

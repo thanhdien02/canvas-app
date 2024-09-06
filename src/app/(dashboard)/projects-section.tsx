@@ -10,10 +10,11 @@ import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import { FileIcon, MoreHorizontal } from "lucide-react";
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
 
 const ProjectsSection = () => {
   const { data, isPending, isError } = useGetProjects();
-  console.log("🚀 ~ ProjectsSection ~ data:", data);
+  const route = useRouter();
   return (
     <div className="mt-5">
       <h2 className="text-xl font-bold mb-4">Recent projects</h2>
@@ -26,7 +27,12 @@ const ProjectsSection = () => {
                   key={project.id}
                   className="p-4 flex items-center border-b w-full justify-between md:justify-stretch"
                 >
-                  <div className="flex items-center gap-x-2 md:w-[35%]">
+                  <div
+                    className="flex items-center gap-x-2 md:w-[35%] cursor-pointer hover:opacity-70"
+                    onClick={() => {
+                      route.push(`/editor/${project.id}`);
+                    }}
+                  >
                     <FileIcon className="size-6" />
                     <span className="text-sm font-medium">{project.name}</span>
                   </div>

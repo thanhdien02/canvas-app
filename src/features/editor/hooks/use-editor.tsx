@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
@@ -14,11 +14,7 @@ import {
   TEXT_OPTIONS,
   TRIANGLE_OPTIONS,
 } from "../type/type.editor";
-import {
-  BuilderEditorProps,
-  Editor,
-  UseEditorProps,
-} from "../type/type.editor";
+import { BuilderEditorProps, Editor } from "../type/type.editor";
 import { useAutoResize } from "./use-auto-resize";
 import { useWindowEvents } from "./use-window-events";
 import useCanvasEvents from "./use-canvas-events";
@@ -26,6 +22,7 @@ import { useClipboard } from "./use-clipboard";
 import { ITextboxOptions } from "fabric/fabric-impl";
 import { downloadFile, isTextType, transformText } from "../utils";
 import useHistory from "./use-history";
+import { useLoadState } from "./use-load-state";
 const builderEditor = ({
   copy,
   paste,
@@ -439,7 +436,16 @@ const builderEditor = ({
   };
 };
 
-const useEditor = () => {
+interface UseEditorProps {
+  width: number;
+  height: number;
+  json: string;
+}
+const useEditor = ({ width, height, json }: UseEditorProps) => {
+  const initialState = useRef<string>(json);
+  const initialWidth = useRef<number>(width);
+  const initialHeight = useRef<number>(height);
+
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
@@ -450,13 +456,14 @@ const useEditor = () => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
+
   const { autoZoom } = useAutoResize({
     canvas,
     container,
   });
 
   // useWindowEvents();
-  // canvas?.loadFromJSON()
+
   const { save } = useHistory();
   useCanvasEvents({ canvas, setSelectedObjects, save });
 
@@ -493,6 +500,8 @@ const useEditor = () => {
     selectedObjects,
     strokeDashArray,
   ]);
+
+  // useLoadState({ canvas, autoZoom, initialState });
 
   const init = useCallback(
     ({
@@ -531,6 +540,11 @@ const useEditor = () => {
       initialCanvas.clipPath = initialWorkspace;
       setCanvas(initialCanvas);
       setContainer(initialContainer);
+
+      const data =
+        initialState.current !== "" ? JSON.parse(initialState.current) : "";
+
+      initialCanvas.loadFromJSON(data, () => {});
     },
     []
   );

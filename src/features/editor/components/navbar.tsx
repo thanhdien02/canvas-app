@@ -19,12 +19,18 @@ import { CiFileOn } from "react-icons/ci";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import Hint from "@/components/hint";
-import { Editor } from "../type/type.editor";
+import { Editor, JSON_KEYS } from "../type/type.editor";
 import { useFilePicker } from "use-file-picker";
+import { useUpdateProject } from "@/features/projects/api/use-update-project";
+import { useParams, usePathname } from "next/navigation";
+import { fabric } from "fabric";
 interface NavbarProps {
   editor: Editor | undefined;
 }
 const Navbar = ({ editor }: NavbarProps) => {
+  const { editerId } = useParams();
+  const mutation = useUpdateProject({ id: editerId as string });
+
   const { openFilePicker } = useFilePicker({
     accept: ".json",
     onFilesSuccessfullySelected: ({ plainFiles }: any) => {
@@ -38,6 +44,13 @@ const Navbar = ({ editor }: NavbarProps) => {
       }
     },
   });
+  const onSave = () => {
+    const currentState = editor?.canvas.toJSON(JSON_KEYS);
+    const json = JSON.stringify(currentState);
+
+    const size = editor?.getActiveSizePage() || { height: 0, width: 0 };
+    mutation.mutate({ ...size, json });
+  };
   return (
     <div className="h-[68px] p-4 pl-8 flex items-center shrink-0 border-b">
       <Link href="/">
@@ -93,7 +106,10 @@ const Navbar = ({ editor }: NavbarProps) => {
         </Hint>
       </div>
       <Separator orientation="vertical" className="mx-2" />
-      <div className="flex items-center gap-x-2">
+      <div
+        className="flex items-center gap-x-2 cursor-pointer"
+        onClick={onSave}
+      >
         <BsCloudCheck className="w-[22px] h-[20px] text-muted-foreground" />
         <span className="text-sm text-muted-foreground">Saved</span>
       </div>

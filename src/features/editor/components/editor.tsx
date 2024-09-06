@@ -17,11 +17,19 @@ import FontSideBar from "./font-sidebar";
 import OpacitySideBar from "./opacity-sidebar";
 import ImageSideBar from "./image-sidebar";
 import SettingSideBar from "./setting-sidebar";
-const Editor = () => {
+import { ResponseType } from "@/features/projects/api/use-get-project";
+interface EditorProps {
+  initialData: ResponseType["data"];
+}
+const Editor = ({ initialData }: EditorProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef(null);
 
-  const { init, editor } = useEditor();
+  const { init, editor } = useEditor({
+    width: initialData.width,
+    height: initialData.height,
+    json: initialData.json,
+  });
 
   const [isActive, setIsActive] = useState<ActiveTool>("select");
   const onChangeActiveTool = useCallback(
@@ -29,7 +37,6 @@ const Editor = () => {
       if (tool === "draw" && isActive !== "draw") {
         editor?.enableDrawingMode();
       }
-
       if (isActive === "draw") {
         editor?.disableDrawingMode();
       }
