@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1725343103897,
-      "tag": "0000_bitter_outlaw_kid",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1725424215578,
-      "tag": "0001_closed_mercury",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1725546498683,
-      "tag": "0002_productive_shard",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1725554106825,
-      "tag": "0003_magenta_fallen_one",
+      "when": 1725772352246,
+      "tag": "0000_mute_mantis",
       "breakpoints": true
     }
   ]

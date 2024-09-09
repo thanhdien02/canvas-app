@@ -5,9 +5,9 @@ interface LayoutDashboardProps {
 }
 const LayoutDashboard = ({ children }: LayoutDashboardProps) => {
   return (
-    <div className="bg-muted flex min-h-screen w-screen">
+    <div className="bg-muted h-full w-full">
       <Sidebar />
-      <div className="lg:flex-1 w-full">{children}</div>
+      <div className="lg:pl-[300px]">{children}</div>
     </div>
   );
 };

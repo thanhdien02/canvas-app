@@ -9,9 +9,9 @@ export default async function Home() {
   await protectServer();
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-screen">
       <Navbar />
-      <div className="bg-white h-full p-8 lg:rounded-tl-xl">
+      <div className="bg-white flex-1 p-8 lg:rounded-tl-xl overflow-auto">
         <Banner />
         <ProjectsSection />
       </div>
