@@ -1,15 +1,13 @@
+import SubscriptionFailModal from "@/features/subscriptions/components/fail-modal";
 import SubscriptionModal from "@/features/subscriptions/components/subscription-modal";
-
-interface ModelProps {
-  isOpen: boolean;
-  onClose: () => void;
-  children?: React.ReactNode;
-}
+import SubscriptionSuccessModal from "@/features/subscriptions/components/success-modal";
 
 const Modals = () => {
   return (
     <>
       <SubscriptionModal />
+      <SubscriptionFailModal />
+      <SubscriptionSuccessModal />
     </>
   );
 };

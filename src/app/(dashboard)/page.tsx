@@ -1,11 +1,9 @@
-import { auth } from "@/auth";
 import { protectServer } from "@/features/auth/utils";
 import Banner from "./banner";
 import Navbar from "./navbar";
 import ProjectsSection from "./projects-section";
 
 export default async function Home() {
-  const session = await auth();
   await protectServer();
 
   return (

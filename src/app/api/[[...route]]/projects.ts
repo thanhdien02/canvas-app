@@ -67,7 +67,7 @@ const app = new Hono()
       }
       const data = await db.select().from(projects).where(eq(projects.id, id));
       if (!data[0]) {
-        return c.json({ error: "Not found" }, 400);
+        return c.json({ data: "Not found" }, 200);
       }
       return c.json({ data: data[0] }, 200);
     }
@@ -95,9 +95,6 @@ const app = new Hono()
         .offset((page - 1) * limit)
         .orderBy(desc(projects.updateAt));
 
-      if (!data[0]) {
-        return c.json({ error: "Not found" }, 400);
-      }
       return c.json({
         data,
         nextPage: data.length === limit ? page + 1 : null,

@@ -7,14 +7,56 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
-import { FileIcon, MoreHorizontal } from "lucide-react";
+import {
+  AlertTriangle,
+  FileIcon,
+  Loader,
+  MoreHorizontal,
+  Search,
+} from "lucide-react";
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
 
 const ProjectsSection = () => {
-  const { data, isPending, isError } = useGetProjects();
+  const { data, isPending, isError, status } = useGetProjects();
   const route = useRouter();
+
+  if (status === "pending" || !data) {
+    return (
+      <div className="mt-5">
+        <h2 className="text-xl font-bold mb-4">Recent projects</h2>
+        <div className="min-h-[300px] w-full flex items-center justify-center">
+          <Loader className="size-6 animate-spin text-muted-foreground" />
+        </div>
+      </div>
+    );
+  } else if (status === "error") {
+    return (
+      <div className="mt-5">
+        <h2 className="text-xl font-bold mb-4">Recent projects</h2>
+        <div className="min-h-[300px] flex flex-col gap-y-4 items-center justify-center">
+          <AlertTriangle className="size-6 text-muted-foreground" />
+          <p className="text-muted-foreground text-sm">
+            Failed to load projects
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data.pages.length || !data.pages[0].data.length) {
+    return (
+      <div className="mt-5">
+        <h2 className="text-xl font-bold mb-4">Recent projects</h2>
+        <div className="min-h-[300px] flex flex-col gap-y-4 items-center justify-center">
+          <Search className="size-6 text-muted-foreground" />
+          <p className="text-muted-foreground text-sm">No projects found</p>
+        </div>
+      </div>
+    );
+  }
+  
   return (
     <div className="mt-5">
       <h2 className="text-xl font-bold mb-4">Recent projects</h2>
