@@ -66,9 +66,7 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
       const data = await db.select().from(projects).where(eq(projects.id, id));
-      if (!data[0]) {
-        return c.json({ data: "Not found" }, 200);
-      }
+      
       return c.json({ data: data[0] }, 200);
     }
   )
