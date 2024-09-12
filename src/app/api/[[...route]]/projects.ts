@@ -7,6 +7,24 @@ import { auth } from "@/auth";
 import { and, desc, eq } from "drizzle-orm";
 
 const app = new Hono()
+  .delete(
+    "/:id",
+    zValidator("param", z.object({ id: z.string() })),
+    async (c) => {
+      const session = await auth();
+      const { id } = c.req.valid("param");
+
+      if (!session || !session?.user?.id) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+      const data = await db
+        .delete(projects)
+        .where(and(eq(projects.id, id), eq(projects.userId, session.user?.id)))
+        .returning();
+
+      return c.json({ data: data[0] });
+    }
+  )
   .patch(
     "/:id",
     zValidator(
@@ -66,7 +84,7 @@ const app = new Hono()
         return c.json({ error: "Unauthorized" }, 401);
       }
       const data = await db.select().from(projects).where(eq(projects.id, id));
-      
+
       return c.json({ data: data[0] }, 200);
     }
   )
@@ -132,6 +150,45 @@ const app = new Hono()
         return c.json({ error: "Something went wrong" }, 400);
       }
       return c.json({ data: data[0] }, 200);
+    }
+  )
+  .post(
+    "/:id/duplicate",
+    zValidator(
+      "param",
+      z.object({
+        id: z.string(),
+      })
+    ),
+    async (c) => {
+      const session = await auth();
+      if (!session || !session.user?.id) {
+        return c.json({ error: "Unauthorized" });
+      }
+      const { id } = c.req.valid("param");
+
+      const dataProject = await db
+        .select()
+        .from(projects)
+        .where(and(eq(projects.id, id), eq(projects.userId, session.user?.id)));
+
+      if (dataProject.length === 0) {
+        return c.json({ error: " Not found" }, 404);
+      }
+      const duplicateData = await db
+        .insert(projects)
+        .values({
+          name: "Make copy of project",
+          height: dataProject[0].height,
+          width: dataProject[0].width,
+          json: dataProject[0].json,
+          userId: session.user?.id || "",
+          createAt: new Date(),
+          updateAt: new Date(),
+        })
+        .returning();
+
+      return c.json({ data: duplicateData[0] }, 200);
     }
   );
 

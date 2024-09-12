@@ -9,19 +9,35 @@ import {
 import { useGetProjects } from "@/features/projects/api/use-get-projects";
 import {
   AlertTriangle,
+  Copy,
   FileIcon,
   Loader,
   MoreHorizontal,
+  Pencil,
   Search,
+  Trash2,
 } from "lucide-react";
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
 import { useRouter } from "next/navigation";
+import { useDeleteProject } from "@/features/projects/api/use-delete-project";
+import { useDuplicateProject } from "@/features/projects/api/use-duplicate-project";
 
 const ProjectsSection = () => {
-  const { data, isPending, isError, status } = useGetProjects();
+  const { data, fetchNextPage, status, hasNextPage, isFetchingNextPage } =
+    useGetProjects();
+
+  const removeMutation = useDeleteProject();
+
+  const duplicateMutation = useDuplicateProject();
   const route = useRouter();
 
+  const onDelete = (id: string) => {
+    removeMutation.mutate({ id });
+  };
+  const onDuplicate = (id: string) => {
+    duplicateMutation.mutate({ id });
+  };
   if (status === "pending" || !data) {
     return (
       <div className="mt-5">
@@ -56,7 +72,7 @@ const ProjectsSection = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="mt-5">
       <h2 className="text-xl font-bold mb-4">Recent projects</h2>
@@ -99,10 +115,21 @@ const ProjectsSection = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-60">
-                        <DropdownMenuItem onClick={() => {}}>
-                          Edit
+                        <DropdownMenuItem
+                          className="flex items-center gap-x-2"
+                          onClick={() => {
+                            onDuplicate(project.id);
+                          }}
+                        >
+                          <Copy className="size-4" /> Make a copy
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => {}}>
+                        <DropdownMenuItem
+                          className="flex items-center gap-x-2"
+                          onClick={() => {
+                            onDelete(project.id);
+                          }}
+                        >
+                          <Trash2 className="size-4" />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -113,6 +140,17 @@ const ProjectsSection = () => {
             </React.Fragment>
           ))}
       </div>
+      {hasNextPage && (
+        <div className="w-full flex items-center justify-center pt-4">
+          <Button
+            variant="ghost"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+          >
+            Load more
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
